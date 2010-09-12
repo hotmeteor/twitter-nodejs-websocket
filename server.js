@@ -1,8 +1,5 @@
 var sys    = require('sys'),
-    http   = require('http'),
-    ws     = require("./vendor/ws"),
-    base64 = require('./vendor/base64'),
-    arrays = require('./vendor/arrays');
+	TwitterNode = require('twitter-node').TwitterNode;
 
 // Command line args
 var USERNAME = process.ARGV[2];
@@ -12,39 +9,29 @@ var KEYWORD  = process.ARGV[4] || "iphone";
 if (!USERNAME || !PASSWORD)
   return sys.puts("Usage: node server.js <twitter_username> <twitter_password> <keyword>");
 
-// Authentication Headers for Twitter
-var headers = [];
-var auth = base64.encode(USERNAME + ':' + PASSWORD);
-headers['Authorization'] = "Basic " + auth;
-headers['Host'] = "stream.twitter.com";
 
-var clients = [];
-
-// Connection to Twitter's streaming API
-var twitter = http.createClient(80, "stream.twitter.com");
-var request = twitter.request("GET", "/1/statuses/filter.json?track=" + KEYWORD, headers);
-
-request.addListener('response', function (response) {
-  response.setBodyEncoding("utf8");
-  response.addListener("data", function (chunk) {
-    // Send response to all connected clients
-    clients.each(function(c) {
-      c.write(chunk);
-    });
-  });
+var twit = new TwitterNode({
+  user: USERNAME, 
+  password:  PASSWORD,
 });
-request.end();
 
-// Websocket TCP server
-ws.createServer(function (websocket) {
-  clients.push(websocket);
 
-  websocket.addListener("connect", function (resource) {
-    // emitted after handshake
-    sys.debug("connect: " + resource);
-  }).addListener("close", function () {
-    // emitted when server or client closes connection
-    clients.remove(websocket);
-    sys.debug("close");
-  });
-}).listen(8080);
+twit.track(KEYWORD)
+
+twit
+  .addListener('tweet', function(tweet) {
+    sys.puts("@" + tweet.user.screen_name + ": " + tweet.text);
+  })
+
+  .addListener('limit', function(limit) {
+    sys.puts("LIMIT: " + sys.inspect(limit));
+  })
+
+  .addListener('delete', function(del) {
+    sys.puts("DELETE: " + sys.inspect(del));
+  })
+
+  .addListener('end', function(resp) {
+    sys.puts("wave goodbye... " + resp.statusCode);
+  })
+  .stream();
