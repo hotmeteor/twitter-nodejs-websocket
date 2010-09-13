@@ -1,10 +1,9 @@
 h1. Twitter Node.js WebSocket Example
 
 Quick experiment of direct streaming from twitter to the browser, with no polling, using Node.js.
-Follow up to http://github.com/andregoncalves/twitter-nodejs-websocket, using "Socket.io":http://socket.io/  and "twitter-node":
+Follow up to http://github.com/andregoncalves/twitter-nodejs-websocket, using "Socket.io":http://socket.io/  and "twitter-node":http://github.com/technoweenie/twitter-node
 
-
-More info "here":http://bit.ly/71uZNv.
+Blog post by andre - "here":http://bit.ly/71uZNv. ) ( This explains the basics of what I have tried to do.)
 
 h2. Requirements:
 
@@ -14,13 +13,8 @@ h2. Requirements:
 h2. How To:
 
 * Download and install node.js (instructions "here":http://nodejs.org/#download).
-* Download the project from "github":http://github.com/andregoncalves/twitter-nodejs-websocket.
+* Download the project from "github":http://github.com/rishav/twitter-nodejs-websocket.
+* Download and install npm and install "twitter-node" and "socket.io"
 * Start the server: @node server.js <twitter_username> <twitter_password> <optional_keyword>@.
 * Open @index.html@ with a WebSocket compatible browser (Chrome or Webkit nightly).
 
-h2. Libraries used:
-
-* "Minimal websocket library":http://github.com/ncr/node.ws.js for node.js from Jacek Becela.
-
-
-Andre Goncalves ("@andregoncalves":http://twitter.com/andregoncalves)

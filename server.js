@@ -66,7 +66,7 @@ send404 = function(res){
 	res.end();
 };
 
-server.listen(8081)
+server.listen(8080)
 // socket.io, I choose you
 // simplest chat application evar
 var io = io.listen(server);
